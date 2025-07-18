@@ -16,7 +16,7 @@ const iconStyles = tv({
   variants: {
     color: {
       white: "text-white",
-      gray: "text-gray-400",
+      black: "text-black",
     },
   },
   defaultVariants: {
@@ -65,7 +65,7 @@ export default function SideBar() {
               "mr-3 flex aspect-square h-4/5 items-center justify-center rounded-lg bg-gradient-to-b from-pink-400 to-pink-600"
             }
           >
-            <span className={"text-xl text-gray-900"}>T</span>
+            <span className={"text-xl font-bold text-gray-900"}>T</span>
           </div>
           <span className={"text-xl font-light text-white"}>
             IsThisTrello Workspace
@@ -118,7 +118,7 @@ export default function SideBar() {
         <div
           className={"z-20 flex h-10 w-10 self-end rounded-xl bg-purple-400"}
         >
-          <CakeIcon className={iconStyles()} />
+          <CakeIcon className={iconStyles({ color: "black" })} />
         </div>
         <div
           className={

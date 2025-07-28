@@ -1,5 +1,11 @@
 import BoardItem from "@/components/homepage/BoardItem";
-import { CakeIcon, ClockIcon } from "@heroicons/react/24/outline";
+import {
+  CakeIcon,
+  ClockIcon,
+  Cog8ToothIcon,
+  UsersIcon,
+  ViewColumnsIcon,
+} from "@heroicons/react/24/outline";
 import { tv } from "tailwind-variants";
 
 const iconStyles = tv({
@@ -16,11 +22,11 @@ const iconStyles = tv({
 });
 
 const tagStyle = tv({
-  base: " flex flex-row items-center gap-2 rounded-lg pr-2 pl-2 h-full bg-opacity-{50}",
+  base: " flex flex-row items-center gap-2 rounded-lg pr-2 pl-2 h-full bg-opacity-{50} cursor-pointer ",
   variants: {
     color: {
-      purple: "bg-purple-950",
-      gray: "bg-gray-700",
+      purple: "bg-purple-950 hover:bg-purple-900",
+      gray: "bg-gray-700 hover:bg-gray-600",
     },
   },
   defaultVariants: {
@@ -46,15 +52,15 @@ export default function Workspaces() {
         </div>
         <div className={"flex h-1/2 flex-row items-center gap-2"}>
           <div className={tagStyle()}>
-            <ClockIcon className={iconStyles({ color: "white" })} />
+            <ViewColumnsIcon className={iconStyles({ color: "white" })} />
             <span className={"text-lg text-white"}>Boards</span>
           </div>
           <div className={tagStyle()}>
-            <ClockIcon className={iconStyles({ color: "white" })} />
+            <UsersIcon className={iconStyles({ color: "white" })} />
             <span className={"text-lg text-white"}>Members</span>
           </div>
           <div className={tagStyle()}>
-            <ClockIcon className={iconStyles({ color: "white" })} />
+            <Cog8ToothIcon className={iconStyles({ color: "white" })} />
             <span className={"text-lg text-white"}>Settings</span>
           </div>
           <div className={tagStyle({ color: "purple" })}>

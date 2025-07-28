@@ -1,5 +1,4 @@
 import {
-  MagnifyingGlassIcon,
   ViewColumnsIcon,
   TableCellsIcon,
   HomeIcon,
@@ -10,6 +9,8 @@ import {
   CakeIcon,
 } from "@heroicons/react/24/outline";
 import { tv } from "tailwind-variants";
+import { Divider } from "@mui/material";
+import React from "react";
 
 const iconStyles = tv({
   base: "h-6 w-6 m-2",
@@ -24,41 +25,34 @@ const iconStyles = tv({
   },
 });
 
+const itemStyle = tv({
+  base: "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400 cursor-pointer",
+});
+
+const itemTextStyle = tv({
+  base: "text-xl font-light text-white",
+});
+
 export default function SideBar() {
   return (
     <div className={"flex h-full w-1/2 flex-col gap-2 justify-self-end p-1"}>
-      <div
-        className={
-          "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400"
-        }
-      >
+      <div className={itemStyle()}>
         <ViewColumnsIcon className={iconStyles()} />
-        <span className={"text-xl font-light text-white"}>Boards</span>
+        <span className={itemTextStyle()}>Boards</span>
       </div>
-      <div
-        className={
-          "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400"
-        }
-      >
+      <div className={itemStyle()}>
         <TableCellsIcon className={iconStyles()} />
-        <span className={"text-xl font-light text-white"}>Templates</span>
+        <span className={itemTextStyle()}>Templates</span>
       </div>
-      <div
-        className={
-          "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400"
-        }
-      >
+      <div className={itemStyle()}>
         <HomeIcon className={iconStyles()} />
-        <span className={"text-xl font-light text-white"}>Home</span>
+        <span className={itemTextStyle()}>Home</span>
       </div>
 
-      <div className={"mt-3 mb-3 flex h-[1px] w-full bg-gray-500"} />
+      <Divider className={"bg-gray-400"} />
+      <span className={"mt-2 mb-2"}>Workspaces</span>
 
-      <div
-        className={
-          "flex h-12 w-full flex-row items-center justify-between rounded-xl hover:bg-gray-500 active:bg-blue-400"
-        }
-      >
+      <div className={itemStyle()}>
         <div className={"flex h-full w-full flex-row items-center p-1"}>
           <div
             className={
@@ -67,41 +61,29 @@ export default function SideBar() {
           >
             <span className={"text-xl font-bold text-gray-900"}>T</span>
           </div>
-          <span className={"text-xl font-light text-white"}>
-            IsThisTrello Workspace
-          </span>
+          <span className={itemTextStyle()}>IsThisTrello Workspace</span>
         </div>
         <ChevronDownIcon className={iconStyles()} />
       </div>
       <div className={"flex w-4/5 flex-col gap-2 self-end"}>
-        <div
-          className={
-            "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400"
-          }
-        >
+        <div className={itemStyle()}>
           <ViewColumnsIcon className={iconStyles()} />
-          <span className={"text-xl font-light text-white"}>Boards</span>
+          <span className={itemTextStyle()}>Boards</span>
         </div>
-        <div
-          className={
-            "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400"
-          }
-        >
+        <div className={itemStyle()}>
           <UsersIcon className={iconStyles()} />
-          <span className={"text-xl font-light text-white"}>Members</span>
+          <span className={itemTextStyle()}>Members</span>
           <div className={"ml-auto flex h-full items-center self-end"}>
             <PlusIcon className={iconStyles()} />
           </div>
         </div>
-        <div
-          className={
-            "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-500 active:bg-blue-400"
-          }
-        >
+        <div className={itemStyle()}>
           <Cog8ToothIcon className={iconStyles()} />
-          <span className={"text-xl font-light text-white"}>Settings</span>
+          <span className={itemTextStyle()}>Settings</span>
         </div>
       </div>
+
+      {/* Card at the bottom - Styles */}
       <div
         className={
           "relative mt-5 flex w-full flex-col gap-2 overflow-hidden bg-gray-700 p-5"

@@ -1,5 +1,10 @@
+"use client";
+
 import { StarIcon } from "@heroicons/react/24/outline";
+import { StarIcon as StarIconFill } from "@heroicons/react/24/solid";
 import { tv } from "tailwind-variants";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   boardName: string;
@@ -11,7 +16,7 @@ const iconStyles = tv({
   variants: {
     color: {
       white: "text-white",
-      gray: "text-gray-400",
+      yellow: "text-yellow-400",
     },
   },
   defaultVariants: {
@@ -30,9 +35,18 @@ const colorClasses = {
 };
 
 export default function BoardItem({ boardName, color }: Props) {
+  const router = useRouter();
+  const [isLiked, setIsLiked] = React.useState(false);
+
   return (
-    <div className="group relative flex h-40 w-60 cursor-pointer flex-col overflow-hidden">
+    <div
+      onClick={() => router.push("/board")}
+      className="group relative flex h-40 w-60 cursor-pointer flex-col overflow-hidden"
+    >
       <div
+        onClick={() => {
+          setIsLiked((prev) => !prev);
+        }}
         className={
           "absolute top-3 right-[-40px] z-10 flex h-7 w-7 items-center justify-center rounded-lg bg-gray-600 opacity-0" +
           " translate-x-[-20px] transform" +
@@ -40,7 +54,11 @@ export default function BoardItem({ boardName, color }: Props) {
           " group-hover:right-3 group-hover:translate-x-0 group-hover:opacity-100"
         }
       >
-        <StarIcon className={iconStyles()} />
+        {!isLiked ? (
+          <StarIcon className={iconStyles()} />
+        ) : (
+          <StarIconFill className={iconStyles({ color: "yellow" })} />
+        )}
       </div>
       <div
         className={

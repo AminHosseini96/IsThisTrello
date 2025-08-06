@@ -7,6 +7,7 @@ import {
   ViewColumnsIcon,
 } from "@heroicons/react/24/outline";
 import { tv } from "tailwind-variants";
+import NewBoardModal from "@/components/homepage/NewBoardModal";
 
 const iconStyles = tv({
   base: "h-6 w-6",
@@ -72,19 +73,18 @@ export default function Workspaces() {
         </div>
       </div>
 
-      <div className={"flex flex-row gap-5"}>
+      <div className={"flex flex-wrap gap-5"}>
         <BoardItem boardName={"Workspace"} color={"yellow"} />
         <BoardItem boardName={"Workspace"} color={"purple"} />
-        <BoardItem boardName={"Workspace"} color={"green"} />
-        <BoardItem boardName={"Workspace"} color={"orange"} />
-      </div>
-      <div
-        className={
-          "mt-5 flex h-40 w-60 cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gray-700 hover:bg-gray-600"
-        }
-      >
-        <span className={"text-lg"}>Create new board</span>
-        <span className={"text-md"}>6 remaining</span>
+        <div
+          className={
+            "flex h-36 w-60 cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gray-700 hover:bg-gray-600"
+          }
+        >
+          <span className={"text-lg"}>Create new board</span>
+          <span className={"text-md"}>6 remaining</span>
+        </div>
+        <NewBoardModal />
       </div>
     </div>
   );

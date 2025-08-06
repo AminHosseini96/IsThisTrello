@@ -8,6 +8,7 @@ import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { tv } from "tailwind-variants";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import type * as CSSTypes from "csstype";
 import {
   DndContext,
   closestCenter,
@@ -15,6 +16,7 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
+  MouseSensor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -57,15 +59,26 @@ function SortableList({
     useSortable({ id });
 
   const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
+    transform: transform ? CSS.Transform.toString(transform) : undefined,
     transition,
     zIndex: isOverlay ? 9999 : "auto",
     opacity: isDraggingPlaceholder ? 0.4 : 1,
-    pointerEvents: isDraggingPlaceholder ? "none" : "auto",
+    pointerEvents: isDraggingPlaceholder
+      ? ("none" as React.CSSProperties["pointerEvents"])
+      : ("auto" as React.CSSProperties["pointerEvents"]),
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div className={"rounded-xl bg-gray-900"} ref={setNodeRef} style={style}>
+      <div
+        {...attributes}
+        {...listeners}
+        className={
+          "flex h-8 w-full cursor-e-resize items-center justify-center rounded-t-xl bg-gray-900"
+        }
+      >
+        <div className={"h-[3px] w-16 rounded-full bg-gray-800"} />
+      </div>
       <ListItem name={name} />
     </div>
   );
@@ -81,7 +94,14 @@ export default function BoardPage() {
   const [isAddingNewList, setIsAddingNewList] = React.useState<boolean>(false);
   const [newListName, setNewListName] = React.useState<string>("");
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 100,
+        distance: 8,
+      },
+    }),
+  );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;

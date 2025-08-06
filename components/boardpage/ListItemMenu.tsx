@@ -1,11 +1,5 @@
 import React, { forwardRef } from "react";
 import { tv } from "tailwind-variants";
-import {
-  ArrowTopRightOnSquareIcon,
-  ChevronRightIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
-import { Divider } from "@mui/material";
 
 interface Props {}
 
@@ -19,19 +13,6 @@ const menuItemStyle = tv({
   },
   defaultVariants: {
     justify: "between",
-  },
-});
-
-const iconStyles = tv({
-  base: "h-6 w-6",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
   },
 });
 

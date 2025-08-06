@@ -32,6 +32,7 @@ const colorClasses = {
   orange: "bg-orange-200",
   pink: "bg-pink-200",
   purple: "bg-purple-200",
+  lime: "bg-lime-200",
 };
 
 export default function BoardItem({ boardName, color }: Props) {
@@ -41,7 +42,7 @@ export default function BoardItem({ boardName, color }: Props) {
   return (
     <div
       onClick={() => router.push("/board")}
-      className="group relative flex h-40 w-60 cursor-pointer flex-col overflow-hidden"
+      className="group relative flex h-36 w-60 cursor-pointer flex-col overflow-hidden"
     >
       <div
         onClick={() => {
@@ -62,14 +63,16 @@ export default function BoardItem({ boardName, color }: Props) {
       </div>
       <div
         className={
-          "absolute z-0 hidden h-28 w-60 rounded-t-xl bg-gray-600 opacity-40 group-hover:block"
+          "absolute z-0 hidden h-36 w-60 rounded-xl bg-gray-600 opacity-40 group-hover:block"
         }
       />
       <div
         className={`${colorClasses[color]} flex h-28 w-full justify-end rounded-t-xl`}
       />
       <div
-        className={"flex h-12 w-full items-center rounded-b-xl bg-gray-900 p-2"}
+        className={
+          "z-10 flex h-12 w-full items-center rounded-b-xl bg-gray-900 p-2"
+        }
       >
         <span>{boardName}</span>
       </div>

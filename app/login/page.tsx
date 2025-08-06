@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import { loginUser, registerUser } from "@/services/authServices";
 
 export default function LoginPage() {
-  const [isSingedUp, setIsSingedUp] = useState(false);
+  const [isSingedUp, setIsSingedUp] = useState(true);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -18,14 +18,20 @@ export default function LoginPage() {
 
     if (!isSingedUp) {
       try {
-        await registerUser(email, password, name);
+        await registerUser({
+          email,
+          password,
+          name,
+          avatar: "",
+          boards: [],
+        });
         router.push("/");
       } catch (error) {
         alert("Signup failed");
       }
     } else {
       try {
-        await loginUser(email, password);
+        await loginUser({ email, password });
         router.push("/");
       } catch (error) {
         alert("Login failed");
@@ -116,7 +122,7 @@ export default function LoginPage() {
               {isSingedUp && (
                 <span
                   onClick={() => setIsSingedUp(false)}
-                  className={"cursor-pointer hover:text-blue-400"}
+                  className={"cursor-pointer hover:text-cyan-200"}
                 >
                   Don&apos;t have an account? SignUp
                 </span>

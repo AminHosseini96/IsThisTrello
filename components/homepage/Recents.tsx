@@ -24,7 +24,7 @@ export default function Recents() {
           Recently Viewed
         </span>
       </div>
-      <div className={"flex flex-row gap-5"}>
+      <div className={"flex flex-wrap gap-5"}>
         <BoardItem boardName={"Workspace"} color={"orange"} />
         <BoardItem boardName={"Workspace"} color={"red"} />
         <BoardItem boardName={"Workspace"} color={"green"} />

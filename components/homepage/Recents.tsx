@@ -1,25 +1,12 @@
-import BoardItem from "@/components/homepage/BoardItem";
-import { tv } from "tailwind-variants";
+import { Icon } from "@/components/common";
+import { BoardItem } from "@/components/homepage";
 import { ClockIcon } from "@heroicons/react/24/outline";
-
-const iconStyles = tv({
-  base: "h-6 w-6 m-2",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
 
 export default function Recents() {
   return (
     <div className={"flex flex-col"}>
       <div className={"mb-2 flex flex-row items-center"}>
-        <ClockIcon className={iconStyles({ color: "white" })} />
+        <Icon icon={ClockIcon} />
         <span className={"text-2xl font-light text-white"}>
           Recently Viewed
         </span>

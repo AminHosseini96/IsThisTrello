@@ -5,7 +5,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "./firebase.config";
 import { doc, setDoc } from "firebase/firestore";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/";
 
 interface login {
   email: string;

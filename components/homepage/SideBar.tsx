@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@/components/common";
 import {
   ViewColumnsIcon,
   TableCellsIcon,
@@ -15,19 +16,6 @@ import { tv } from "tailwind-variants";
 import { Divider } from "@mui/material";
 import React from "react";
 
-const iconStyles = tv({
-  base: "h-6 w-6 m-2",
-  variants: {
-    color: {
-      white: "text-white",
-      black: "text-black",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
-
 const itemStyle = tv({
   base: "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-700 active:bg-gray-600 cursor-pointer",
 });
@@ -42,15 +30,15 @@ export default function SideBar() {
   return (
     <div className={"flex h-full max-w-80 flex-col gap-2 justify-self-end p-1"}>
       <div className={itemStyle()}>
-        <ViewColumnsIcon className={iconStyles()} />
+        <Icon icon={ViewColumnsIcon} />
         <span className={itemTextStyle()}>Boards</span>
       </div>
       <div className={itemStyle()}>
-        <TableCellsIcon className={iconStyles()} />
+        <Icon icon={TableCellsIcon} />
         <span className={itemTextStyle()}>Templates</span>
       </div>
       <div className={itemStyle()}>
-        <HomeIcon className={iconStyles()} />
+        <Icon icon={HomeIcon} />
         <span className={itemTextStyle()}>Home</span>
       </div>
 
@@ -72,27 +60,27 @@ export default function SideBar() {
           <span className={itemTextStyle()}>IsThisTrello Workspace</span>
         </div>
         {!showOptions ? (
-          <ChevronDownIcon className={iconStyles()} />
+          <Icon icon={ChevronDownIcon} />
         ) : (
-          <ChevronUpIcon className={iconStyles()} />
+          <Icon icon={ChevronUpIcon} />
         )}
       </div>
       <div
         className={`flex w-4/5 flex-col gap-2 self-end ${showOptions ? "opacity-100" : "opacity-0"}`}
       >
         <div className={itemStyle()}>
-          <ViewColumnsIcon className={iconStyles()} />
+          <Icon icon={ViewColumnsIcon} />
           <span className={itemTextStyle()}>Boards</span>
         </div>
         <div className={itemStyle()}>
-          <UsersIcon className={iconStyles()} />
+          <Icon icon={UsersIcon} />
           <span className={itemTextStyle()}>Members</span>
           <div className={"ml-auto flex h-full items-center self-end"}>
-            <PlusIcon className={iconStyles()} />
+            <Icon icon={PlusIcon} />
           </div>
         </div>
         <div className={itemStyle()}>
-          <Cog8ToothIcon className={iconStyles()} />
+          <Icon icon={Cog8ToothIcon} />
           <span className={itemTextStyle()}>Settings</span>
         </div>
       </div>
@@ -110,10 +98,10 @@ export default function SideBar() {
         </a>
         <div
           className={
-            "z-20 flex h-10 w-10 self-end rounded-xl bg-purple-400 hover:bg-purple-500"
+            "z-20 flex h-10 w-10 items-center justify-center self-end rounded-xl bg-purple-400 hover:bg-purple-500"
           }
         >
-          <CakeIcon className={iconStyles({ color: "black" })} />
+          <Icon icon={CakeIcon} size={"lg"} />
         </div>
         <div
           className={

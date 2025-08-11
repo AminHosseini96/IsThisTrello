@@ -1,5 +1,10 @@
 "use client";
 
+import { Icon } from "@/components/common/";
+import { ProfileMenu } from "@/components/common/index";
+import { useClickOutside } from "@/hooks";
+import { useUiStore } from "@/stores";
+import { cn } from "@/utils";
 import {
   BellIcon,
   MagnifyingGlassIcon,
@@ -10,85 +15,57 @@ import {
 import Image from "next/image";
 import { tv } from "tailwind-variants";
 import { useRouter } from "next/navigation";
-import { JSX, ReactNode, useEffect, useRef, useState } from "react";
-import ProfileMenu from "@/components/ProfileMenu";
-
-const iconStyles = tv({
-  base: "h-6 w-6 m-2",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
-
-const iconContainerStyles = tv({
-  base: "flex aspect-square h-full cursor-pointer items-center justify-center rounded-lg hover:bg-gray-700",
-});
+import React, { JSX, useEffect, useRef, useState } from "react";
 
 const headerSectionsStyles = tv({
-  base: "flex flex-row items-center h-full p-1",
+  base: "flex flex-row items-center h-full p-1 gap-1 ",
 });
 
-interface HeaderProps {
-  isLoggedIn: boolean;
-  loginAction?: () => void;
-}
-
-export default function Header({
-  isLoggedIn = false,
-  loginAction,
-}: HeaderProps): JSX.Element {
+export default function Header(): JSX.Element {
+  const isLoading = useUiStore((state) => state.ui.isLoading);
+  const isLoggedIn = useUiStore((state) => state.ui.isLoggedIn);
+  const setUi = useUiStore((state) => state.setUi);
+  const ui = useUiStore((state) => state.ui);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    console.log(ui);
+  }, [ui]);
+
+  useClickOutside({
+    ref: menuRef as React.RefObject<HTMLDivElement>,
+    handler: () => {
+      setShowProfileMenu(false);
+    },
+    when: showProfileMenu,
+  });
 
   const goHome = () => {
     router.push("/");
   };
 
-  const goLogin = () => {
-    router.push("/login");
-  };
-
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowProfileMenu(false);
-      }
-    }
-
-    if (showProfileMenu) {
-      document.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [showProfileMenu]);
-
   return (
     <header
-      className={
-        "flex h-16 w-full items-center justify-between border-b border-b-gray-400"
-      }
+      className={cn(
+        "h-16 w-full border-b border-b-gray-400",
+        isLoading && "opacity-0",
+      )}
     >
       {isLoggedIn ? (
-        <>
+        <div className={"grid grid-cols-[1fr_3fr_1fr]"}>
           <div className={headerSectionsStyles()}>
-            <div onClick={goLogin} className={iconContainerStyles()}>
-              <Squares2X2Icon className={iconStyles()} />
-            </div>
+            <Icon
+              icon={Squares2X2Icon}
+              containerHoverColor={"gray"}
+              cursor={"pointer"}
+            />
             <div
               onClick={goHome}
               className={
-                "flex h-full cursor-pointer flex-row items-center justify-between rounded-lg p-2 hover:bg-gray-700"
+                "flex cursor-pointer flex-row items-center justify-between rounded-lg p-2 hover:bg-gray-700"
               }
             >
               <Image
@@ -103,18 +80,24 @@ export default function Header({
               </span>
             </div>
           </div>
-          <div className={headerSectionsStyles()}>
-            <div className={"relative flex items-center justify-center"}>
-              <div className={"absolute left-3 w-full"}>
-                <MagnifyingGlassIcon
-                  className={iconStyles({ color: "gray" })}
-                />
-              </div>
+          <div
+            className={cn(
+              headerSectionsStyles(),
+              "w-full justify-center justify-self-center px-48",
+            )}
+          >
+            <div className={"relative flex w-full items-center justify-center"}>
+              <Icon
+                icon={MagnifyingGlassIcon}
+                color={"gray"}
+                containerSize={"sm"}
+                containerStyle={"absolute left-4"}
+              />
               <input
                 type={"text"}
                 placeholder={"Search"}
                 className={
-                  "m-2 h-full w-200 rounded-lg border-2 border-blue-200 bg-gray-800 p-2 pl-10"
+                  "m-2 h-full w-full rounded-lg border-2 border-blue-200 bg-gray-800 p-2 pl-10"
                 }
               />
             </div>
@@ -126,16 +109,22 @@ export default function Header({
               Create
             </button>
           </div>
-          <div className={headerSectionsStyles()}>
-            <div className={iconContainerStyles()}>
-              <MegaphoneIcon className={iconStyles()} />
-            </div>
-            <div className={iconContainerStyles()}>
-              <BellIcon className={iconStyles()} />
-            </div>
-            <div className={iconContainerStyles()}>
-              <QuestionMarkCircleIcon className={iconStyles()} />
-            </div>
+          <div className={cn(headerSectionsStyles(), "justify-self-end")}>
+            <Icon
+              icon={MegaphoneIcon}
+              containerHoverColor={"gray"}
+              cursor={"pointer"}
+            />
+            <Icon
+              icon={BellIcon}
+              containerHoverColor={"gray"}
+              cursor={"pointer"}
+            />
+            <Icon
+              icon={QuestionMarkCircleIcon}
+              containerHoverColor={"gray"}
+              cursor={"pointer"}
+            />
             <div
               onClick={() => setShowProfileMenu((prevState) => !prevState)}
               className={
@@ -146,7 +135,7 @@ export default function Header({
               {showProfileMenu && <ProfileMenu ref={menuRef} />}
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <div
           className={"flex h-full w-full flex-row items-center justify-evenly"}
@@ -168,7 +157,10 @@ export default function Header({
               className={
                 "flex h-full cursor-pointer items-center p-5 hover:bg-gray-600"
               }
-              onClick={loginAction}
+              onClick={() => {
+                console.log(ui);
+                setUi({ isSignedUp: true });
+              }}
             >
               <span className={"text-xl"}>Login</span>
             </div>

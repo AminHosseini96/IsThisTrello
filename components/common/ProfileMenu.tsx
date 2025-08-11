@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@/components/common/";
 import React, { forwardRef } from "react";
 import { tv } from "tailwind-variants";
 import {
@@ -11,7 +12,7 @@ import { Divider } from "@mui/material";
 import { logoutUser } from "@/services/authServices";
 import { useRouter } from "next/navigation";
 
-interface Props {}
+type Props = object;
 
 const menuItemStyle = tv({
   base: "flex h-12 flex-row items-center hover:bg-gray-600 pl-2 pr-2 rounded-lg",
@@ -23,19 +24,6 @@ const menuItemStyle = tv({
   },
   defaultVariants: {
     justify: "between",
-  },
-});
-
-const iconStyles = tv({
-  base: "h-6 w-6",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
   },
 });
 
@@ -71,7 +59,7 @@ const ProfileMenu = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
       </div>
       <div className={menuItemStyle()}>
         <span>Manage account</span>
-        <ArrowTopRightOnSquareIcon className={iconStyles()} />
+        <Icon icon={ArrowTopRightOnSquareIcon} containerSize={"sm"} />
       </div>
       <Divider className={"bg-gray-400"} />
       <span className={"mt-2 mb-2 text-sm font-bold"}>IsThisTrello</span>
@@ -89,11 +77,11 @@ const ProfileMenu = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
       </div>
       <div className={menuItemStyle()}>
         <span>Theme</span>
-        <ChevronRightIcon className={iconStyles()} />
+        <Icon icon={ChevronRightIcon} containerSize={"sm"} />
       </div>
       <Divider className={"bg-gray-400"} />
       <div className={menuItemStyle({ justify: "none" })}>
-        <UsersIcon className={iconStyles()} />
+        <Icon icon={UsersIcon} containerSize={"sm"} />
         <span>Create Workspace</span>
       </div>
       <Divider className={"bg-gray-400"} />

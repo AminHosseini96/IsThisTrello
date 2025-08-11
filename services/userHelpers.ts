@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase.config";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/";
 
 export async function fetchAndStoreUserData(uid: string) {
   const userDoc = await getDoc(doc(db, "users", uid));

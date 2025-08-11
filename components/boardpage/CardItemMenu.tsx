@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { tv } from "tailwind-variants";
 
-interface Props {}
+type Props = object;
 
 const menuItemStyle = tv({
   base: "w-fit rounded-md bg-gray-600 p-2 z-40 hover:bg-gray-700 cursor-pointer",

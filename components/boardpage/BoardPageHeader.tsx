@@ -1,5 +1,8 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
-import ProfileMenu from "@/components/ProfileMenu";
+import { Icon } from "@/components/common/";
+import { NewBoardModal } from "@/components/homepage";
+import { useClickOutside } from "@/hooks";
+import { useBoardStore } from "@/stores";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   Bars3Icon,
   EllipsisHorizontalIcon,
@@ -9,40 +12,31 @@ import {
   UsersIcon,
   CheckBadgeIcon,
   UserPlusIcon,
-  BellIcon,
 } from "@heroicons/react/24/outline";
-import { tv } from "tailwind-variants";
 
 interface Props {
   name: string;
 }
 
-const iconContainerStyles = tv({
-  base: "flex aspect-square p-3 cursor-pointer items-center justify-center rounded-lg hover:bg-blue-700",
-});
-
-const iconStyles = tv({
-  base: "h-6 w-6",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-      blue: "text-blue-950",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
-
-export default function BoardPageHeader({
-  name = "Test",
-}: Props): React.ReactElement {
-  const [boardName, setBoardName] = React.useState(name);
+export default function BoardPageHeader({}: Props): React.ReactElement {
+  //States
+  const boardData = useBoardStore((state) => state.board);
+  const [boardName, setBoardName] = React.useState(boardData?.name);
   const [changeNameState, setChangeNameState] = React.useState(false);
+  const [showNewBoardModal, setShowNewBoardModal] = useState(false);
+  //Refs
+  const newBoardModalRef = useRef<HTMLDivElement | null>(null);
   const spanRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inputDivRef = useRef<HTMLDivElement>(null);
+  //Hooks
+  useClickOutside({
+    ref: newBoardModalRef as React.RefObject<HTMLElement>,
+    handler: () => {
+      setShowNewBoardModal(false);
+    },
+    when: showNewBoardModal,
+  });
 
   useLayoutEffect(() => {
     if (spanRef.current && inputRef.current && inputDivRef.current) {
@@ -51,7 +45,6 @@ export default function BoardPageHeader({
       inputDivRef.current.style.width = `${width + 30}px`;
     }
   }, [boardName, changeNameState]);
-
   return (
     <>
       <div
@@ -101,43 +94,58 @@ export default function BoardPageHeader({
             }
           >
             <span className={"text-4xl text-gray-700"}>A</span>
-            <div
-              className={
-                "absolute right-[-5] bottom-[-5] rounded-full bg-blue-400"
-              }
-            >
-              <CheckBadgeIcon className={iconStyles()} />
-            </div>
-          </div>
-          <div className={iconContainerStyles()}>
-            <RocketLaunchIcon className={iconStyles({ color: "white" })} />
-          </div>
-          <div className={iconContainerStyles()}>
-            <MagnifyingGlassIcon className={iconStyles({ color: "white" })} />
-          </div>
-          <div className={iconContainerStyles()}>
-            <Bars3Icon className={iconStyles({ color: "white" })} />
-          </div>
-          <div className={iconContainerStyles()}>
-            <StarIcon className={iconStyles({ color: "white" })} />
-          </div>
-          <div className={iconContainerStyles()}>
-            <UsersIcon className={iconStyles({ color: "white" })} />
-          </div>
-          <div
-            className={
-              "flex flex-row gap-2 rounded-md bg-gray-200 p-2 hover:bg-amber-50"
-            }
-          >
-            <UserPlusIcon className={iconStyles({ color: "blue" })} />
-            <span className={"text-xl text-blue-950"}>Share</span>
-          </div>
-          <div className={iconContainerStyles()}>
-            <EllipsisHorizontalIcon
-              className={iconStyles({ color: "white" })}
+            <Icon
+              icon={CheckBadgeIcon}
+              rounded={"full"}
+              containerStyle={"absolute right-[-5] bottom-[-5] bg-blue-400 p-0"}
             />
           </div>
+          <Icon
+            icon={RocketLaunchIcon}
+            cursor={"pointer"}
+            containerHoverColor={"blue"}
+            rounded={"lg"}
+          />
+          <Icon
+            icon={MagnifyingGlassIcon}
+            cursor={"pointer"}
+            containerHoverColor={"blue"}
+            rounded={"lg"}
+          />
+          <Icon
+            icon={Bars3Icon}
+            cursor={"pointer"}
+            containerHoverColor={"blue"}
+            rounded={"lg"}
+          />
+          <Icon
+            icon={StarIcon}
+            cursor={"pointer"}
+            containerHoverColor={"blue"}
+            rounded={"lg"}
+          />
+          <Icon
+            icon={UsersIcon}
+            cursor={"pointer"}
+            containerHoverColor={"blue"}
+            rounded={"lg"}
+          />
+          <div
+            className={
+              "flex flex-row items-center gap-2 rounded-md bg-gray-200 p-2 pr-3 hover:bg-amber-50"
+            }
+          >
+            <Icon icon={UserPlusIcon} color={"blue"} containerSize={"sm"} />
+            <span className={"text-xl text-blue-950"}>Share</span>
+          </div>
+          <Icon
+            icon={EllipsisHorizontalIcon}
+            cursor={"pointer"}
+            containerHoverColor={"blue"}
+            rounded={"lg"}
+          />
         </div>
+        {showNewBoardModal && <NewBoardModal ref={newBoardModalRef} />}
       </div>
     </>
   );

@@ -1,18 +1,15 @@
 "use client";
 
-import Header from "@/components/Header";
-import React from "react";
-import BoardPageHeader from "@/components/boardpage/BoardPageHeader";
-import ListItem from "@/components/boardpage/ListItem";
+import { BoardPageHeader, ListItem } from "@/components/boardpage";
+import { Icon } from "@/components/common";
+import { useUiStore } from "@/stores";
+import React, { useEffect } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { tv } from "tailwind-variants";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import type * as CSSTypes from "csstype";
 import {
   DndContext,
   closestCenter,
-  PointerSensor,
   useSensor,
   useSensors,
   DragOverlay,
@@ -24,23 +21,6 @@ import {
   arrayMove,
   useSortable,
 } from "@dnd-kit/sortable";
-
-const iconStyles = tv({
-  base: "h-6 w-6",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
-
-const iconContainerStyles = tv({
-  base: "flex aspect-square h-full cursor-pointer items-center justify-center rounded-lg hover:bg-gray-700",
-});
 
 type ListType = { id: string; name: string };
 
@@ -93,6 +73,8 @@ export default function BoardPage() {
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const [isAddingNewList, setIsAddingNewList] = React.useState<boolean>(false);
   const [newListName, setNewListName] = React.useState<string>("");
+  const setUi = useUiStore((state) => state.setUi);
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -102,6 +84,16 @@ export default function BoardPage() {
       },
     }),
   );
+
+  useEffect(() => {
+    if (isAddingNewList) {
+      inputRef.current?.focus();
+    }
+  }, [isAddingNewList]);
+
+  useEffect(() => {
+    setUi({ isLoading: false, isLoggedIn: true, isSignedUp: true });
+  }, [setUi]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -115,15 +107,11 @@ export default function BoardPage() {
     }
   }
 
-  React.useEffect(() => {
-    if (isAddingNewList) {
-      inputRef.current?.focus();
-    }
-  }, [isAddingNewList]);
-
   return (
-    <div className={"flex h-dvh w-full flex-col"}>
-      <Header isLoggedIn={true} />
+    <div
+      className={"flex w-full flex-col"}
+      style={{ height: "calc(100dvh - 4rem)" }}
+    >
       <BoardPageHeader name={"Board"} />
       <div
         className={
@@ -173,7 +161,7 @@ export default function BoardPage() {
               "flex h-16 w-96 min-w-96 cursor-pointer flex-row items-center gap-2 rounded-xl bg-blue-500 p-4 hover:bg-blue-600"
             }
           >
-            <PlusIcon className={iconStyles()} />
+            <Icon icon={PlusIcon} size={"lg"} containerSize={"sm"} />
             <span className={"text-xl"}>Add another list</span>
           </div>
         ) : (
@@ -203,17 +191,20 @@ export default function BoardPage() {
                   setIsAddingNewList(false);
                 }}
                 className={
-                  "cursor-pointer rounded-xl bg-blue-500 p-3 text-lg hover:bg-blue-400 disabled:bg-gray-600"
+                  "cursor-pointer rounded-lg bg-blue-500 p-3 text-lg hover:bg-blue-600 disabled:bg-gray-600"
                 }
               >
                 Add list
               </button>
-              <div className={iconContainerStyles()}>
-                <XMarkIcon
-                  onClick={() => setIsAddingNewList(false)}
-                  className={iconStyles()}
-                />
-              </div>
+              <Icon
+                icon={XMarkIcon}
+                action={() => {
+                  setIsAddingNewList(false);
+                }}
+                rounded={"full"}
+                containerHoverColor={"gray"}
+                cursor={"pointer"}
+              />
             </div>
           </div>
         )}

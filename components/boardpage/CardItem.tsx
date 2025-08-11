@@ -1,9 +1,9 @@
 "use client";
 
+import { CardItemMenu } from "@/components/boardpage";
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import CardItemMenu from "@/components/boardpage/CardItemMenu";
 
 interface Props {
   cardName: string;

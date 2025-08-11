@@ -1,22 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import { useUiStore } from "@/stores";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Header from "@/components/Header";
 import { loginUser, registerUser } from "@/services/authServices";
 
 export default function LoginPage() {
-  const [isSingedUp, setIsSingedUp] = useState(true);
+  const isSignedUp = useUiStore((state) => state.ui.isSignedUp);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const setUi = useUiStore((state) => state.setUi);
+
   const router = useRouter();
+  useEffect(() => {
+    setUi({ isLoading: false, isLoggedIn: false, isSignedUp: true });
+  }, [setUi]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!isSingedUp) {
+    if (!isSignedUp) {
       try {
         await registerUser({
           email,
@@ -27,6 +32,7 @@ export default function LoginPage() {
         });
         router.push("/");
       } catch (error) {
+        console.log(error);
         alert("Signup failed");
       }
     } else {
@@ -34,6 +40,7 @@ export default function LoginPage() {
         await loginUser({ email, password });
         router.push("/");
       } catch (error) {
+        console.log(error);
         alert("Login failed");
       }
     }
@@ -41,7 +48,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <Header isLoggedIn={false} loginAction={() => setIsSingedUp(true)} />
       <div
         className={
           "mt-36 grid h-4/5 w-4/5 grid-cols-[3fr_2fr] gap-6 justify-self-center"
@@ -84,7 +90,7 @@ export default function LoginPage() {
             className="flex h-full w-3/4 flex-col justify-around"
           >
             <div className={"flex w-full flex-col items-center gap-5"}>
-              {!isSingedUp && (
+              {!isSignedUp && (
                 <input
                   type="name"
                   placeholder="Name"
@@ -117,11 +123,11 @@ export default function LoginPage() {
                 className="w-full cursor-pointer rounded bg-blue-600 p-2 text-white hover:bg-blue-500"
                 onClick={handleSubmit}
               >
-                {isSingedUp ? "Login" : "Sign Up"}
+                {isSignedUp ? "Login" : "Sign Up"}
               </button>
-              {isSingedUp && (
+              {isSignedUp && (
                 <span
-                  onClick={() => setIsSingedUp(false)}
+                  onClick={() => setUi({ isSignedUp: false })}
                   className={"cursor-pointer hover:text-cyan-200"}
                 >
                   Don&apos;t have an account? SignUp

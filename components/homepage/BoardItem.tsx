@@ -1,8 +1,8 @@
 "use client";
 
+import { Icon } from "@/components/common";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconFill } from "@heroicons/react/24/solid";
-import { tv } from "tailwind-variants";
 import React from "react";
 import { useRouter } from "next/navigation";
 
@@ -10,19 +10,6 @@ interface Props {
   boardName: string;
   color: "green" | "red" | "blue" | "yellow" | "orange" | "pink" | "purple";
 }
-
-const iconStyles = tv({
-  base: "h-6 w-6",
-  variants: {
-    color: {
-      white: "text-white",
-      yellow: "text-yellow-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
 
 const colorClasses = {
   green: "bg-green-200",
@@ -56,9 +43,13 @@ export default function BoardItem({ boardName, color }: Props) {
         }
       >
         {!isLiked ? (
-          <StarIcon className={iconStyles()} />
+          <Icon icon={StarIcon} containerSize={"sm"} />
         ) : (
-          <StarIconFill className={iconStyles({ color: "yellow" })} />
+          <Icon
+            icon={StarIconFill}
+            iconStyle={"text-yellow-400"}
+            containerSize={"sm"}
+          />
         )}
       </div>
       <div

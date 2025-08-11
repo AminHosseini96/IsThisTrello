@@ -1,8 +1,8 @@
+import { Icon } from "@/components/common";
 import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef } from "react";
-import { tv } from "tailwind-variants";
 import ListItemMenu from "@/components/boardpage/ListItemMenu";
-import CardItem from "@/components/boardpage/CardItem";
+import { CardItem } from "@/components/boardpage";
 import {
   arrayMove,
   verticalListSortingStrategy,
@@ -19,23 +19,6 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-
-const iconStyles = tv({
-  base: "h-6 w-6 m-2",
-  variants: {
-    color: {
-      white: "text-white",
-      gray: "text-gray-400",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
-
-const iconContainerStyles = tv({
-  base: "flex aspect-square h-full cursor-pointer items-center justify-center rounded-lg hover:bg-gray-700 relative",
-});
 
 type ListType = { id: string; name: string };
 
@@ -134,17 +117,18 @@ export default function ListItem({ name }: Props) {
         "flex max-h-fit w-96 min-w-96 flex-col gap-2 rounded-b-xl bg-gray-900 px-4 pb-4"
       }
     >
-      <div className={"flex flex-row items-center"}>
+      <div className={"relative flex flex-row items-center"}>
         <span className={"mr-auto text-xl"}>{name}</span>
-        <div
-          onClick={() => {
+        <Icon
+          icon={EllipsisHorizontalIcon}
+          action={() => {
             setShowMenu(!showMenu);
           }}
-          className={iconContainerStyles()}
-        >
-          <EllipsisHorizontalIcon className={iconStyles()} />
-          {showMenu && <ListItemMenu ref={menuRef} />}
-        </div>
+          cursor={"pointer"}
+          containerHoverColor={"gray"}
+          containerSize={"sm"}
+        />
+        {showMenu && <ListItemMenu ref={menuRef} />}
       </div>
       <div className={"flex w-full flex-col gap-1"}>
         <DndContext
@@ -184,7 +168,7 @@ export default function ListItem({ name }: Props) {
           "flex h-10 w-full cursor-pointer flex-row items-center rounded-xl hover:bg-gray-800"
         }
       >
-        <PlusIcon className={iconStyles()} />
+        <Icon icon={PlusIcon} />
         <span className={"text-xl"}>Add a card</span>
       </div>
     </div>

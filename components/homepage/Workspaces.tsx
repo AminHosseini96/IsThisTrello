@@ -1,29 +1,17 @@
-import BoardItem from "@/components/homepage/BoardItem";
+import { Icon } from "@/components/common";
+import { BoardItem, NewBoardModal } from "@/components/homepage";
+import { useClickOutside } from "@/hooks/";
 import {
   CakeIcon,
-  ClockIcon,
   Cog8ToothIcon,
   UsersIcon,
   ViewColumnsIcon,
 } from "@heroicons/react/24/outline";
 import { tv } from "tailwind-variants";
-import NewBoardModal from "@/components/homepage/NewBoardModal";
-
-const iconStyles = tv({
-  base: "h-6 w-6",
-  variants: {
-    color: {
-      white: "text-white",
-      black: "text-black",
-    },
-  },
-  defaultVariants: {
-    color: "white",
-  },
-});
+import React, { useRef, useState } from "react";
 
 const tagStyle = tv({
-  base: " flex flex-row items-center gap-2 rounded-lg pr-2 pl-2 h-full bg-opacity-{50} cursor-pointer ",
+  base: " flex flex-row items-center px-1 pr-2 gap-1 rounded-lg h-full bg-opacity-{50} cursor-pointer ",
   variants: {
     color: {
       purple: "bg-purple-950 hover:bg-purple-900",
@@ -36,6 +24,18 @@ const tagStyle = tv({
 });
 
 export default function Workspaces() {
+  const [showNewBoardModal, setShowNewBoardModal] = useState(false);
+
+  const newBoardModalRef = useRef<HTMLDivElement | null>(null);
+
+  useClickOutside({
+    ref: newBoardModalRef as React.RefObject<HTMLElement>,
+    handler: () => {
+      setShowNewBoardModal(false);
+    },
+    when: showNewBoardModal,
+  });
+
   return (
     <div className={"flex flex-col"}>
       <div className={"flex w-full flex-row items-center justify-between"}>
@@ -53,20 +53,24 @@ export default function Workspaces() {
         </div>
         <div className={"flex h-1/2 flex-row items-center gap-2"}>
           <div className={tagStyle()}>
-            <ViewColumnsIcon className={iconStyles({ color: "white" })} />
+            <Icon icon={ViewColumnsIcon} containerSize={"sm"} />
             <span className={"text-lg text-white"}>Boards</span>
           </div>
           <div className={tagStyle()}>
-            <UsersIcon className={iconStyles({ color: "white" })} />
+            <Icon icon={UsersIcon} containerSize={"sm"} />
             <span className={"text-lg text-white"}>Members</span>
           </div>
           <div className={tagStyle()}>
-            <Cog8ToothIcon className={iconStyles({ color: "white" })} />
+            <Icon icon={Cog8ToothIcon} containerSize={"sm"} />
             <span className={"text-lg text-white"}>Settings</span>
           </div>
           <div className={tagStyle({ color: "purple" })}>
             <div className={"flex rounded-md bg-purple-400"}>
-              <CakeIcon className={iconStyles({ color: "black" })} />
+              <Icon
+                icon={CakeIcon}
+                containerSize={"sm"}
+                containerStyle={"p-0"}
+              />
             </div>
             <span className={"text-lg text-white"}>Upgrade</span>
           </div>
@@ -77,6 +81,7 @@ export default function Workspaces() {
         <BoardItem boardName={"Workspace"} color={"yellow"} />
         <BoardItem boardName={"Workspace"} color={"purple"} />
         <div
+          onClick={() => setShowNewBoardModal(true)}
           className={
             "flex h-36 w-60 cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gray-700 hover:bg-gray-600"
           }
@@ -84,7 +89,7 @@ export default function Workspaces() {
           <span className={"text-lg"}>Create new board</span>
           <span className={"text-md"}>6 remaining</span>
         </div>
-        <NewBoardModal />
+        {showNewBoardModal && <NewBoardModal ref={newBoardModalRef} />}
       </div>
     </div>
   );

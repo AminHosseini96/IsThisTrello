@@ -1,6 +1,6 @@
 "use client";
 
-import { createBoard } from "@/services/boardServices";
+import { useBoardStore, useUserStore } from "@/stores";
 import React, { forwardRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -21,17 +21,12 @@ type ColorName = keyof typeof colorClasses;
 const NewBoardModal = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
   const [color, setColor] = useState<string>(colorClasses.purple);
   const [title, setTitle] = useState<string>("");
+  const { createBoard } = useBoardStore();
+
   const router = useRouter();
 
   const submitNewBoard = async () => {
-    const newBoard = {
-      name: title,
-      color: color,
-      createdAt: new Date(),
-      lists: [],
-    };
-
-    await createBoard(newBoard);
+    await createBoard(title, color);
     router.push("/board");
   };
 

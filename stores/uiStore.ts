@@ -1,10 +1,5 @@
+import { UiData } from "@/types";
 import { create } from "zustand";
-
-interface UiData {
-  isLoading?: boolean;
-  isLoggedIn?: boolean;
-  isSignedUp?: boolean;
-}
 
 interface UiStore {
   ui: UiData;
@@ -16,6 +11,7 @@ const useUiStore = create<UiStore>((set) => ({
     isLoading: true,
     isLoggedIn: true,
     isSignedUp: true,
+    colorTheme: "orange",
   },
   setUi: (partialUi) =>
     set((state) => ({

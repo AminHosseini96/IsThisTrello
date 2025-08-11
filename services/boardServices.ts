@@ -1,4 +1,6 @@
-import { useBoardStore, useUserStore } from "@/stores";
+"use client";
+
+import { useBoardStore } from "@/stores";
 import { BoardData } from "@/types";
 import { db } from "./firebase.config";
 import {
@@ -8,21 +10,19 @@ import {
   collection,
   serverTimestamp,
   arrayUnion,
+  getDoc,
 } from "firebase/firestore";
 
-const user = useUserStore.getState().user;
-
-export async function createBoard(data: BoardData) {
-  if (!user || !user.uid) throw new Error("User not logged in");
-
+export async function createBoard(data: BoardData, uid: string) {
   try {
     const docRef = await addDoc(collection(db, "boards"), {
       ...data,
       createdAt: serverTimestamp(),
-      uid: user.uid,
+      lastUpdatedAt: serverTimestamp(),
+      uid: uid,
     });
 
-    const userDocRef = doc(db, "users", user.uid);
+    const userDocRef = doc(db, "users", uid);
     await updateDoc(userDocRef, {
       boards: arrayUnion(docRef.id),
     });
@@ -31,6 +31,7 @@ export async function createBoard(data: BoardData) {
       ...data,
       id: docRef.id,
       createdAt: new Date(),
+      lastUpdatedAt: new Date(),
     };
     useBoardStore.getState().setBoard(newBoard);
 
@@ -41,10 +42,16 @@ export async function createBoard(data: BoardData) {
   }
 }
 
-// export async function readBoard(id: string) {
-//   const snapshot = await getDoc(doc(db, "boards", id));
-//   return snapshot.exists() ? snapshot.data() : null;
-// }
+export async function readBoard(id: string) {
+  const snapshot = await getDoc(doc(db, "boards", id));
+  return snapshot.exists() ? snapshot.data() : null;
+}
+
+export async function readAllBoards() {
+  const snapshot = await getDoc(doc(db, "boards"));
+  return snapshot.exists() ? snapshot.data() : null;
+}
+
 //
 // export async function updateBoard(id: string, data: Partial<any>) {
 //   await updateDoc(doc(db, "boards", id), data);

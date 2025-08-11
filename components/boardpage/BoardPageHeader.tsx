@@ -1,7 +1,8 @@
 import { Icon } from "@/components/common/";
 import { NewBoardModal } from "@/components/homepage";
 import { useClickOutside } from "@/hooks";
-import { useBoardStore } from "@/stores";
+import { useBoardStore, useUiStore } from "@/stores";
+import { boardPageHeaderStyles } from "@/styles/board";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   Bars3Icon,
@@ -21,14 +22,17 @@ interface Props {
 export default function BoardPageHeader({}: Props): React.ReactElement {
   //States
   const boardData = useBoardStore((state) => state.board);
-  const [boardName, setBoardName] = React.useState(boardData?.name);
-  const [changeNameState, setChangeNameState] = React.useState(false);
+  const [boardName, setBoardName] = useState(boardData?.name);
+  const [changeNameState, setChangeNameState] = useState(false);
   const [showNewBoardModal, setShowNewBoardModal] = useState(false);
+  const colorTheme = useUiStore((state) => state.ui.colorTheme);
+
   //Refs
   const newBoardModalRef = useRef<HTMLDivElement | null>(null);
   const spanRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inputDivRef = useRef<HTMLDivElement>(null);
+
   //Hooks
   useClickOutside({
     ref: newBoardModalRef as React.RefObject<HTMLElement>,
@@ -45,11 +49,10 @@ export default function BoardPageHeader({}: Props): React.ReactElement {
       inputDivRef.current.style.width = `${width + 30}px`;
     }
   }, [boardName, changeNameState]);
+
   return (
     <>
-      <div
-        className={"flex h-20 w-full flex-row items-center bg-blue-600 px-3"}
-      >
+      <div className={boardPageHeaderStyles({ color: colorTheme })}>
         <div>
           <div
             ref={inputDivRef}

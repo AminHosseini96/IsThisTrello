@@ -1,34 +1,35 @@
 "use client";
 
 import { Icon } from "@/components/common";
+import { useBoardStore, useUiStore } from "@/stores";
+import { BoardData, UiData } from "@/types";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconFill } from "@heroicons/react/24/solid";
 import React from "react";
 import { useRouter } from "next/navigation";
 
-interface Props {
-  boardName: string;
-  color: "green" | "red" | "blue" | "yellow" | "orange" | "pink" | "purple";
-}
-
-const colorClasses = {
-  green: "bg-green-200",
-  red: "bg-red-200",
-  blue: "bg-blue-200",
-  yellow: "bg-yellow-200",
-  orange: "bg-orange-200",
-  pink: "bg-pink-200",
-  purple: "bg-purple-200",
-  lime: "bg-lime-200",
-};
-
-export default function BoardItem({ boardName, color }: Props) {
-  const router = useRouter();
+export default function BoardItem(boardData: BoardData) {
   const [isLiked, setIsLiked] = React.useState(false);
+  const { setBoard } = useBoardStore();
+  const { setUi } = useUiStore();
+
+  const router = useRouter();
+
+  const handleClick = () => {
+    const color: UiData["colorTheme"] = boardData.color.slice(
+      3,
+      -4,
+    ) as UiData["colorTheme"];
+    setUi({
+      colorTheme: color as UiData["colorTheme"],
+    });
+    setBoard(boardData);
+    router.push("/board");
+  };
 
   return (
     <div
-      onClick={() => router.push("/board")}
+      onClick={handleClick}
       className="group relative flex h-36 w-60 cursor-pointer flex-col overflow-hidden"
     >
       <div
@@ -58,14 +59,14 @@ export default function BoardItem({ boardName, color }: Props) {
         }
       />
       <div
-        className={`${colorClasses[color]} flex h-28 w-full justify-end rounded-t-xl`}
+        className={`${boardData.color} flex h-28 w-full justify-end rounded-t-xl`}
       />
       <div
         className={
           "z-10 flex h-12 w-full items-center rounded-b-xl bg-gray-900 p-2"
         }
       >
-        <span>{boardName}</span>
+        <span>{boardData.name}</span>
       </div>
     </div>
   );

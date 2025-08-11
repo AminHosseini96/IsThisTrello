@@ -3,6 +3,7 @@
 import { BoardPageHeader, ListItem } from "@/components/boardpage";
 import { Icon } from "@/components/common";
 import { useUiStore } from "@/stores";
+import { boardPageButtonStyles, boardPageStyles } from "@/styles/board";
 import React, { useEffect } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import type { DragEndEvent } from "@dnd-kit/core";
@@ -74,6 +75,7 @@ export default function BoardPage() {
   const [isAddingNewList, setIsAddingNewList] = React.useState<boolean>(false);
   const [newListName, setNewListName] = React.useState<string>("");
   const setUi = useUiStore((state) => state.setUi);
+  const colorTheme = useUiStore((state) => state.ui.colorTheme);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const sensors = useSensors(
@@ -106,18 +108,13 @@ export default function BoardPage() {
       setLists((items) => arrayMove(items, oldIndex, newIndex));
     }
   }
-
   return (
     <div
       className={"flex w-full flex-col"}
       style={{ height: "calc(100dvh - 4rem)" }}
     >
       <BoardPageHeader name={"Board"} />
-      <div
-        className={
-          "flex w-full grow flex-row gap-5 overflow-x-auto scroll-auto bg-blue-400 p-5"
-        }
-      >
+      <div className={boardPageStyles({ color: colorTheme })}>
         <div className={"flex h-fit flex-row gap-5"}>
           <DndContext
             sensors={sensors}
@@ -157,9 +154,7 @@ export default function BoardPage() {
               setIsAddingNewList(true);
               setNewListName("");
             }}
-            className={
-              "flex h-16 w-96 min-w-96 cursor-pointer flex-row items-center gap-2 rounded-xl bg-blue-500 p-4 hover:bg-blue-600"
-            }
+            className={boardPageButtonStyles({ color: colorTheme })}
           >
             <Icon icon={PlusIcon} size={"lg"} containerSize={"sm"} />
             <span className={"text-xl"}>Add another list</span>
@@ -191,7 +186,7 @@ export default function BoardPage() {
                   setIsAddingNewList(false);
                 }}
                 className={
-                  "cursor-pointer rounded-lg bg-blue-500 p-3 text-lg hover:bg-blue-600 disabled:bg-gray-600"
+                  "cursor-pointer rounded-md bg-blue-600 p-3 hover:bg-blue-500 disabled:bg-gray-600"
                 }
               >
                 Add list

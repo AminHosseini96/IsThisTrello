@@ -1,8 +1,7 @@
 "use client";
 
 import { Icon } from "@/components/common/";
-import { ProfileMenu } from "@/components/common/index";
-import { useClickOutside } from "@/hooks";
+import Avatar from "@/components/common/Avatar";
 import { useUiStore } from "@/stores";
 import { cn } from "@/utils";
 import {
@@ -15,7 +14,7 @@ import {
 import Image from "next/image";
 import { tv } from "tailwind-variants";
 import { useRouter } from "next/navigation";
-import React, { JSX, useEffect, useRef, useState } from "react";
+import React, { JSX } from "react";
 
 const headerSectionsStyles = tv({
   base: "flex flex-row items-center h-full p-1 gap-1 ",
@@ -26,22 +25,8 @@ export default function Header(): JSX.Element {
   const isLoggedIn = useUiStore((state) => state.ui.isLoggedIn);
   const setUi = useUiStore((state) => state.setUi);
   const ui = useUiStore((state) => state.ui);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const menuRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    console.log(ui);
-  }, [ui]);
-
-  useClickOutside({
-    ref: menuRef as React.RefObject<HTMLDivElement>,
-    handler: () => {
-      setShowProfileMenu(false);
-    },
-    when: showProfileMenu,
-  });
 
   const goHome = () => {
     router.push("/");
@@ -125,15 +110,7 @@ export default function Header(): JSX.Element {
               containerHoverColor={"gray"}
               cursor={"pointer"}
             />
-            <div
-              onClick={() => setShowProfileMenu((prevState) => !prevState)}
-              className={
-                "relative mr-2 ml-2 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-full bg-orange-200"
-              }
-            >
-              <span className={"text-4xl text-gray-700"}>A</span>
-              {showProfileMenu && <ProfileMenu ref={menuRef} />}
-            </div>
+            <Avatar isMenuEnabled={true} />
           </div>
         </div>
       ) : (

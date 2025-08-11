@@ -2,32 +2,44 @@
 
 import { LoadingScreen } from "@/components/common";
 import { Recents, SideBar, Workspaces } from "@/components/homepage";
-import { useUiStore } from "@/stores";
+import { useBoardStore, useUiStore } from "@/stores";
 import { useEffect } from "react";
 import { auth } from "@/services/firebase.config";
 import { onAuthStateChanged } from "@firebase/auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { fetchAndStoreUserData } from "@/services/userHelpers";
 
 export default function Home() {
-  const loading = useUiStore((state) => state.ui.isLoading);
+  const isLoading = useUiStore((state) => state.ui.isLoading);
   const router = useRouter();
+  const pathname = usePathname();
   const setUi = useUiStore((state) => state.setUi);
+  const { fetchBoardsRealtime, loading } = useBoardStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    let unsubscribeBoards: (() => void) | undefined;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
         setUi({ isLoggedIn: false });
-        router.replace("/login");
+        if (pathname !== "/login") router.replace("/login");
       } else {
         await fetchAndStoreUserData(firebaseUser.uid);
-        setUi({ isLoggedIn: true, isLoading: false });
+        unsubscribeBoards = fetchBoardsRealtime();
       }
     });
-    return () => unsubscribe();
-  }, [router, setUi]);
 
-  if (loading) return <LoadingScreen />;
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeBoards) unsubscribeBoards();
+    };
+  }, [pathname, router, setUi]);
+
+  useEffect(() => {
+    setUi({ isLoading: loading });
+  }, [loading]);
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <div

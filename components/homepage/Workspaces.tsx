@@ -1,6 +1,8 @@
 import { Icon } from "@/components/common";
 import { BoardItem, NewBoardModal } from "@/components/homepage";
 import { useClickOutside } from "@/hooks/";
+import { useBoardStore } from "@/stores";
+import { BoardData } from "@/types";
 import {
   CakeIcon,
   Cog8ToothIcon,
@@ -25,6 +27,7 @@ const tagStyle = tv({
 
 export default function Workspaces() {
   const [showNewBoardModal, setShowNewBoardModal] = useState(false);
+  const { boards } = useBoardStore();
 
   const newBoardModalRef = useRef<HTMLDivElement | null>(null);
 
@@ -78,8 +81,12 @@ export default function Workspaces() {
       </div>
 
       <div className={"flex flex-wrap gap-5"}>
-        <BoardItem boardName={"Workspace"} color={"yellow"} />
-        <BoardItem boardName={"Workspace"} color={"purple"} />
+        {boards &&
+          boards.map((board: BoardData, index) => {
+            return (
+              <BoardItem name={board.name} color={board.color} key={index} />
+            );
+          })}
         <div
           onClick={() => setShowNewBoardModal(true)}
           className={

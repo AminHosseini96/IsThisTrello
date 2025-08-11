@@ -10,17 +10,26 @@ export interface BoardData {
   id?: string;
   uid?: string;
   name: string;
-  color: string;
-  createdAt: Date;
-  lists: Array<object>;
+  color:
+    | "purple"
+    | "green"
+    | "red"
+    | "blue"
+    | "yellow"
+    | "orange"
+    | "pink"
+    | "lime";
+  createdAt?: Date;
+  lastUpdatedAt?: Date;
+  lists?: Array<object>;
 }
 
 export interface ListData {
   id?: string;
   uid?: string;
   boardId?: string;
-  title: string;
-  cards: Array<CardData>;
+  name: string;
+  cards?: Array<CardData>;
 }
 
 export interface CardData {
@@ -28,7 +37,22 @@ export interface CardData {
   uid?: string;
   boardId?: string;
   listId?: string;
-  title: string;
+  name: string;
   description?: string;
   dueDate?: Date;
+}
+
+export interface UiData {
+  isLoading?: boolean;
+  isLoggedIn?: boolean;
+  isSignedUp?: boolean;
+  colorTheme?:
+    | "purple"
+    | "green"
+    | "red"
+    | "blue"
+    | "yellow"
+    | "orange"
+    | "pink"
+    | "lime";
 }

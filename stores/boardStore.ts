@@ -89,6 +89,10 @@ const useBoardStore = create<BoardStore>((set, get) => ({
         lists: [],
       });
 
+      await updateDoc(newBoardRef, {
+        id: newBoardRef.id,
+      });
+
       await updateDoc(doc(db, "users", user.uid), {
         boards: arrayUnion(newBoardRef.id),
       });
@@ -108,6 +112,12 @@ const useBoardStore = create<BoardStore>((set, get) => ({
         lastUpdatedAt: serverTimestamp(),
       });
     } catch (err) {
+      console.log(
+        "%cError",
+        "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+        err,
+      );
+
       set({ error: err instanceof Error ? err.message : String(err) });
     }
   },

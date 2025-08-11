@@ -84,7 +84,15 @@ export default function Workspaces() {
         {boards &&
           boards.map((board: BoardData, index) => {
             return (
-              <BoardItem name={board.name} color={board.color} key={index} />
+              <BoardItem
+                name={board.name}
+                color={board.color}
+                id={board.id}
+                createdAt={board.createdAt}
+                lists={board.lists}
+                lastUpdatedAt={board.lastUpdatedAt}
+                key={index}
+              />
             );
           })}
         <div

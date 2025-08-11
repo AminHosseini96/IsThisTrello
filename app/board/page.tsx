@@ -2,9 +2,9 @@
 
 import { BoardPageHeader, ListItem } from "@/components/boardpage";
 import { Icon } from "@/components/common";
-import { useUiStore } from "@/stores";
+import { useBoardStore, useUiStore } from "@/stores";
 import { boardPageButtonStyles, boardPageStyles } from "@/styles/board";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -66,18 +66,19 @@ function SortableList({
 }
 
 export default function BoardPage() {
-  const [lists, setLists] = React.useState<ListType[]>([
+  const [lists, setLists] = useState<ListType[]>([
     { id: "1", name: "Games" },
     { id: "2", name: "Hobbies" },
     { id: "3", name: "Work" },
   ]);
-  const [activeId, setActiveId] = React.useState<string | null>(null);
-  const [isAddingNewList, setIsAddingNewList] = React.useState<boolean>(false);
-  const [newListName, setNewListName] = React.useState<string>("");
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [isAddingNewList, setIsAddingNewList] = useState<boolean>(false);
+  const [newListName, setNewListName] = useState<string>("");
+  const { updateBoard, board } = useBoardStore();
   const setUi = useUiStore((state) => state.setUi);
   const colorTheme = useUiStore((state) => state.ui.colorTheme);
 
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
@@ -86,6 +87,12 @@ export default function BoardPage() {
       },
     }),
   );
+
+  useEffect(() => {
+    (async () => {
+      await updateBoard(board?.id as string, {});
+    })();
+  }, [board, updateBoard]);
 
   useEffect(() => {
     if (isAddingNewList) {

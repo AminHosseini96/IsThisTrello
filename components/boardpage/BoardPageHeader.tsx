@@ -1,9 +1,10 @@
 import { Icon } from "@/components/common/";
+import Avatar from "@/components/common/Avatar";
 import { NewBoardModal } from "@/components/homepage";
 import { useClickOutside } from "@/hooks";
 import { useBoardStore, useUiStore } from "@/stores";
 import { boardPageHeaderStyles } from "@/styles/board";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import {
   Bars3Icon,
   EllipsisHorizontalIcon,
@@ -22,6 +23,7 @@ interface Props {
 export default function BoardPageHeader({}: Props): React.ReactElement {
   //States
   const boardData = useBoardStore((state) => state.board);
+  const { updateBoard } = useBoardStore();
   const [boardName, setBoardName] = useState(boardData?.name);
   const [changeNameState, setChangeNameState] = useState(false);
   const [showNewBoardModal, setShowNewBoardModal] = useState(false);
@@ -46,9 +48,18 @@ export default function BoardPageHeader({}: Props): React.ReactElement {
     if (spanRef.current && inputRef.current && inputDivRef.current) {
       const width = spanRef.current.offsetWidth;
       inputRef.current.style.width = `${width + 10}px`;
-      inputDivRef.current.style.width = `${width + 30}px`;
+      inputDivRef.current.style.width = `${width + 10}px`;
     }
   }, [boardName, changeNameState]);
+
+  //Helpers
+  const handleInputBlur = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChangeNameState(false);
+    setBoardName(e.target.value);
+    if (boardData?.id && boardData?.name !== e.target.value) {
+      await updateBoard(boardData?.id, { name: e.target.value });
+    }
+  };
 
   return (
     <>
@@ -57,8 +68,9 @@ export default function BoardPageHeader({}: Props): React.ReactElement {
           <div
             ref={inputDivRef}
             onClick={() => setChangeNameState(true)}
-            className={"rounded-md p-3 hover:bg-blue-500"}
-            style={{ width: "fit-content" }}
+            className={
+              "cursor-pointer rounded-md border-2 border-transparent hover:border-white"
+            }
           >
             {!changeNameState ? (
               <span className={"px-1 text-2xl"}>{boardName}</span>
@@ -67,12 +79,9 @@ export default function BoardPageHeader({}: Props): React.ReactElement {
                 value={boardName}
                 ref={inputRef}
                 autoFocus={true}
-                className={"w-full px-1 text-2xl"}
+                className={"w-full rounded-md px-1 text-2xl"}
                 type="text"
-                onBlur={(e) => {
-                  setChangeNameState(false);
-                  setBoardName(e.target.value);
-                }}
+                onBlur={handleInputBlur}
                 onChange={(e) => setBoardName(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === "Escape") {
@@ -91,18 +100,7 @@ export default function BoardPageHeader({}: Props): React.ReactElement {
           </div>
         </div>
         <div className={"ml-auto flex flex-row items-center gap-1"}>
-          <div
-            className={
-              "relative mr-2 ml-2 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-full bg-orange-200"
-            }
-          >
-            <span className={"text-4xl text-gray-700"}>A</span>
-            <Icon
-              icon={CheckBadgeIcon}
-              rounded={"full"}
-              containerStyle={"absolute right-[-5] bottom-[-5] bg-blue-400 p-0"}
-            />
-          </div>
+          <Avatar isMenuEnabled={false} isOwner={true} />
           <Icon
             icon={RocketLaunchIcon}
             cursor={"pointer"}

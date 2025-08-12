@@ -1,14 +1,16 @@
 "use clinet";
 
-import { ProfileMenu } from "@/components/common/index";
+import { Icon, ProfileMenu } from "@/components/common/index";
 import { useClickOutside } from "@/hooks";
 import { useUserStore } from "@/stores";
+import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef, useState } from "react";
 import { tv } from "tailwind-variants";
 
 interface Props {
   action?: () => void;
   isMenuEnabled?: boolean;
+  isOwner?: boolean;
 }
 
 const containerStyles = tv({
@@ -21,7 +23,11 @@ const containerStyles = tv({
   },
 });
 
-export default function Avatar({ action, isMenuEnabled }: Props) {
+export default function Avatar({
+  action,
+  isOwner = false,
+  isMenuEnabled,
+}: Props) {
   //States
   const { user } = useUserStore();
   const [hasAvatar, setHasAvatar] = useState<boolean>(false);
@@ -55,6 +61,13 @@ export default function Avatar({ action, isMenuEnabled }: Props) {
           {user?.name.slice(0, 1).toUpperCase()}
         </span>
         {isMenuEnabled && showProfileMenu && <ProfileMenu ref={menuRef} />}
+        {isOwner && (
+          <Icon
+            icon={CheckBadgeIcon}
+            rounded={"full"}
+            containerStyle={"absolute right-[-5] bottom-[-5] bg-blue-400 p-0"}
+          />
+        )}
       </div>
     );
 }

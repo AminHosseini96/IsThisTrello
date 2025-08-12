@@ -17,6 +17,23 @@ export default function Home() {
   const { fetchBoardsRealtime, loading } = useBoardStore();
 
   useEffect(() => {
+    const originalConsoleLog = console.log;
+    console.log = (...args) => {
+      if (
+        args.some(
+          (arg) =>
+            typeof arg === "string" &&
+            (arg.includes("[Fast Refresh]") ||
+              arg.includes("turbopack-hot-reloader")),
+        )
+      ) {
+        return;
+      }
+      originalConsoleLog(...args);
+    };
+  }, []);
+
+  useEffect(() => {
     let unsubscribeBoards: (() => void) | undefined;
 
     const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {

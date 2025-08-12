@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon } from "@/components/common/";
+import Avatar from "@/components/common/Avatar";
 import React, { forwardRef } from "react";
 import { tv } from "tailwind-variants";
 import {
@@ -42,13 +43,7 @@ const ProfileMenu = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
     >
       <span className={"mt-2 mb-2 text-sm font-bold"}>ACCOUNT</span>
       <div className={"flex flex-row items-center"}>
-        <div
-          className={
-            "relative mr-2 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-full bg-orange-200"
-          }
-        >
-          <span className={"text-4xl text-gray-700"}>A</span>
-        </div>
+        <Avatar isMenuEnabled={false} />
         <div className={"flex flex-col gap-2"}>
           <span>Amin Karandish</span>
           <span>karandsh.mamin@gmail.com</span>

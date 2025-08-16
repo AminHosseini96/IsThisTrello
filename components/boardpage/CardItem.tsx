@@ -1,7 +1,9 @@
 "use client";
 
 import { CardItemMenu } from "@/components/boardpage";
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import { useUiStore } from "@/stores";
+import { cardStyles } from "@/styles/card";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -10,10 +12,12 @@ interface Props {
 }
 
 export default function CardItem({ cardName }: Props): React.ReactNode {
-  const [checked, setChecked] = React.useState(false);
-  const [showMenu, setShowMenu] = React.useState(false);
-  const [name, setName] = React.useState(cardName);
-  const [prevName, setPrevName] = React.useState(cardName);
+  const [checked, setChecked] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [name, setName] = useState(cardName);
+  const [prevName, setPrevName] = useState(cardName);
+  const { ui } = useUiStore();
+
   const menuRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const nameSpanRef = useRef<HTMLSpanElement | null>(null);
@@ -41,7 +45,10 @@ export default function CardItem({ cardName }: Props): React.ReactNode {
         />
       )}
       <div
-        className={`relative ${showMenu ? "z-30 min-h-32 bg-gray-600" : "z-0 min-h-16 bg-gray-700"} box-border flex h-fit w-full flex-col rounded-xl ${showMenu ? "" : "border-2 group-hover:border-white"} border-transparent p-3 transition-all duration-100`}
+        className={cardStyles({
+          isMenuOpen: showMenu ? "open" : "closed",
+          color: ui.colorTheme,
+        })}
       >
         <div className="relative flex items-center gap-2">
           <div
@@ -49,9 +56,9 @@ export default function CardItem({ cardName }: Props): React.ReactNode {
             className={
               "absolute h-5 w-5 cursor-pointer items-center justify-center rounded-full transition-all delay-150 duration-300 " +
               (checked
-                ? "flex scale-100 bg-green-600 opacity-100"
+                ? "flex scale-100 bg-emerald-600 opacity-100"
                 : "scale-75 opacity-0 group-hover:flex group-hover:scale-100 group-hover:opacity-100") +
-              (!checked ? " border-2 border-gray-200" : "") +
+              (!checked ? " border-2 border-slate-200" : "") +
               `${showMenu ? "block scale-100 opacity-100" : ""}`
             }
           >
@@ -95,7 +102,7 @@ export default function CardItem({ cardName }: Props): React.ReactNode {
               }
               setShowMenu((prev) => !prev);
             }}
-            className={`absolute right-0 cursor-pointer rounded-md p-2 transition-opacity delay-50 duration-300 group-hover:opacity-100 ${showMenu ? "bg-gray-600 opacity-100 hover:bg-gray-500" : "opacity-0 hover:bg-gray-600"}`}
+            className={`absolute right-0 cursor-pointer rounded-md p-2 transition-opacity delay-50 duration-300 group-hover:opacity-100 ${showMenu ? "bg-slate-600 opacity-100 hover:bg-slate-500" : "opacity-0 hover:bg-slate-600"}`}
           >
             {!showMenu ? (
               <PencilIcon className={`h-4 w-4 text-white`} />
@@ -110,7 +117,7 @@ export default function CardItem({ cardName }: Props): React.ReactNode {
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => setShowMenu(false)}
           className={
-            "font-bol relative z-50 mt-2 cursor-pointer rounded-lg bg-blue-500 p-2 text-lg hover:bg-blue-600"
+            "font-bol relative z-50 mt-2 cursor-pointer rounded-lg bg-sky-500 p-2 text-lg hover:bg-sky-600"
           }
         >
           Save

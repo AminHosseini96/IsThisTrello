@@ -35,7 +35,7 @@ export default function Header(): JSX.Element {
   return (
     <header
       className={cn(
-        "h-16 w-full border-b border-b-gray-400",
+        "h-16 w-full border-b border-b-slate-400",
         isLoading && "opacity-0",
       )}
     >
@@ -44,13 +44,13 @@ export default function Header(): JSX.Element {
           <div className={headerSectionsStyles()}>
             <Icon
               icon={Squares2X2Icon}
-              containerHoverColor={"gray"}
+              containerHoverColor={"slate"}
               cursor={"pointer"}
             />
             <div
               onClick={goHome}
               className={
-                "flex cursor-pointer flex-row items-center justify-between rounded-lg p-2 hover:bg-gray-700"
+                "flex cursor-pointer flex-row items-center justify-between rounded-lg p-2 hover:bg-slate-700"
               }
             >
               <Image
@@ -71,10 +71,14 @@ export default function Header(): JSX.Element {
               "w-full justify-center justify-self-center px-48",
             )}
           >
-            <div className={"relative flex w-full items-center justify-center"}>
+            <div
+              className={
+                "group relative flex w-full items-center justify-center"
+              }
+            >
               <Icon
                 icon={MagnifyingGlassIcon}
-                color={"gray"}
+                color={"slate"}
                 containerSize={"sm"}
                 containerStyle={"absolute left-4"}
               />
@@ -82,13 +86,13 @@ export default function Header(): JSX.Element {
                 type={"text"}
                 placeholder={"Search"}
                 className={
-                  "m-2 h-full w-full rounded-lg border-2 border-blue-200 bg-gray-800 p-2 pl-10"
+                  "focus: m-2 h-full w-full rounded-lg border-2 border-sky-200/50 bg-slate-800 p-2 pl-10 group-hover:border-sky-200 group-focus:border-sky-200"
                 }
               />
             </div>
             <button
               className={
-                "rounded-sm bg-blue-600 p-2 text-white hover:bg-blue-500"
+                "rounded-sm bg-sky-600 p-2 text-white hover:bg-sky-500"
               }
             >
               Create
@@ -97,17 +101,17 @@ export default function Header(): JSX.Element {
           <div className={cn(headerSectionsStyles(), "justify-self-end")}>
             <Icon
               icon={MegaphoneIcon}
-              containerHoverColor={"gray"}
+              containerHoverColor={"slate"}
               cursor={"pointer"}
             />
             <Icon
               icon={BellIcon}
-              containerHoverColor={"gray"}
+              containerHoverColor={"slate"}
               cursor={"pointer"}
             />
             <Icon
               icon={QuestionMarkCircleIcon}
-              containerHoverColor={"gray"}
+              containerHoverColor={"slate"}
               cursor={"pointer"}
             />
             <Avatar isMenuEnabled={true} />
@@ -132,7 +136,7 @@ export default function Header(): JSX.Element {
           <div className={"flex h-full flex-row items-center"}>
             <div
               className={
-                "flex h-full cursor-pointer items-center p-5 hover:bg-gray-600"
+                "flex h-full cursor-pointer items-center p-5 hover:bg-slate-600"
               }
               onClick={() => {
                 console.log(ui);
@@ -143,7 +147,7 @@ export default function Header(): JSX.Element {
             </div>
             <div
               className={
-                "flex h-full cursor-pointer items-center bg-blue-500 p-5 hover:bg-blue-400"
+                "flex h-full cursor-pointer items-center bg-sky-500 p-5 hover:bg-sky-400"
               }
             >
               <span className={"text-xl"}>Get IsThisTrello for free</span>

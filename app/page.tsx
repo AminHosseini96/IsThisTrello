@@ -3,6 +3,7 @@
 import { LoadingScreen } from "@/components/common";
 import { Recents, SideBar, Workspaces } from "@/components/homepage";
 import { useBoardStore, useUiStore } from "@/stores";
+import useListStore from "@/stores/listStore";
 import { useEffect } from "react";
 import { auth } from "@/services/firebase.config";
 import { onAuthStateChanged } from "@firebase/auth";
@@ -15,6 +16,7 @@ export default function Home() {
   const pathname = usePathname();
   const setUi = useUiStore((state) => state.setUi);
   const { fetchBoardsRealtime, loading } = useBoardStore();
+  const { setLists } = useListStore();
 
   useEffect(() => {
     const originalConsoleLog = console.log;
@@ -32,6 +34,10 @@ export default function Home() {
       originalConsoleLog(...args);
     };
   }, []);
+
+  useEffect(() => {
+    setLists([]);
+  }, [pathname]);
 
   useEffect(() => {
     let unsubscribeBoards: (() => void) | undefined;

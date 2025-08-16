@@ -16,12 +16,12 @@ const tagStyle = tv({
   base: " flex flex-row items-center px-1 pr-2 gap-1 rounded-lg h-full bg-opacity-{50} cursor-pointer ",
   variants: {
     color: {
-      purple: "bg-purple-950 hover:bg-purple-900",
-      gray: "bg-gray-700 hover:bg-gray-600",
+      violet: "bg-violet-950 hover:bg-violet-900",
+      slate: "bg-slate-700 hover:bg-slate-600",
     },
   },
   defaultVariants: {
-    color: "gray",
+    color: "slate",
   },
 });
 
@@ -48,7 +48,7 @@ export default function Workspaces() {
               "mr-3 flex aspect-square h-4/5 items-center justify-center rounded-lg bg-gradient-to-b from-pink-400 to-pink-600"
             }
           >
-            <span className={"text-3xl font-bold text-gray-900"}>T</span>
+            <span className={"text-3xl font-bold text-slate-900"}>T</span>
           </div>
           <span className={"text-xl font-light text-white"}>
             IsThisTrello Workspace
@@ -67,8 +67,8 @@ export default function Workspaces() {
             <Icon icon={Cog8ToothIcon} containerSize={"sm"} />
             <span className={"text-lg text-white"}>Settings</span>
           </div>
-          <div className={tagStyle({ color: "purple" })}>
-            <div className={"flex rounded-md bg-purple-400"}>
+          <div className={tagStyle({ color: "violet" })}>
+            <div className={"flex rounded-md bg-violet-400"}>
               <Icon
                 icon={CakeIcon}
                 containerSize={"sm"}
@@ -98,7 +98,7 @@ export default function Workspaces() {
         <div
           onClick={() => setShowNewBoardModal(true)}
           className={
-            "flex h-36 w-60 cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-gray-700 hover:bg-gray-600"
+            "flex h-36 w-60 cursor-pointer flex-col items-center justify-center gap-5 rounded-xl bg-slate-700 hover:bg-slate-600"
           }
         >
           <span className={"text-lg"}>Create new board</span>

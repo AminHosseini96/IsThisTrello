@@ -5,11 +5,11 @@ import type { ComponentType, SVGProps } from "react";
 interface IconProps {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   action?: () => void;
-  color?: "white" | "gray" | "blue";
+  color?: "white" | "slate" | "sky";
   size?: "sm" | "md" | "lg";
   iconStyle?: string;
   containerStyle?: string;
-  containerHoverColor?: "gray" | "blue" | "none";
+  containerHoverColor?: "slate" | "sky" | "none";
   cursor?: "pointer" | "none";
   containerSize?: "sm" | "md" | "lg";
   rounded?: "full" | "lg";

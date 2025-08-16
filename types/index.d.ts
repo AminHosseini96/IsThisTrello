@@ -9,13 +9,13 @@ export interface UserData {
 export interface BoardData {
   id?: string;
   uid?: string;
-  name: string;
-  color:
-    | "purple"
-    | "green"
-    | "red"
-    | "blue"
-    | "yellow"
+  name?: string;
+  color?:
+    | "violet"
+    | "emerald"
+    | "rose"
+    | "sky"
+    | "amber"
     | "orange"
     | "pink"
     | "lime";
@@ -26,32 +26,30 @@ export interface BoardData {
 
 export interface ListData {
   id?: string;
-  uid?: string;
   boardId?: string;
-  name: string;
+  name?: string;
   cards?: Array<CardData>;
+  position?: number;
 }
 
 export interface CardData {
   id?: string;
-  uid?: string;
-  boardId?: string;
   listId?: string;
-  name: string;
-  description?: string;
-  dueDate?: Date;
+  name?: string;
+  position?: number;
 }
 
 export interface UiData {
   isLoading?: boolean;
   isLoggedIn?: boolean;
   isSignedUp?: boolean;
+  isBoardEmpty?: boolean;
   colorTheme?:
-    | "purple"
-    | "green"
-    | "red"
-    | "blue"
-    | "yellow"
+    | "violet"
+    | "emerald"
+    | "rose"
+    | "sky"
+    | "amber"
     | "orange"
     | "pink"
     | "lime";

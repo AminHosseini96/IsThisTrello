@@ -4,7 +4,7 @@ import { tv } from "tailwind-variants";
 type Props = object;
 
 const menuItemStyle = tv({
-  base: "w-fit rounded-md bg-gray-600 p-2 z-40 hover:bg-gray-700 cursor-pointer",
+  base: "w-fit rounded-md bg-slate-600 p-2 z-40 hover:bg-slate-700 cursor-pointer",
 });
 
 const CardItemMenu = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {

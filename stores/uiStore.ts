@@ -11,6 +11,7 @@ const useUiStore = create<UiStore>((set) => ({
     isLoading: true,
     isLoggedIn: true,
     isSignedUp: true,
+    isBoardEmpty: false,
     colorTheme: "orange",
   },
   setUi: (partialUi) =>

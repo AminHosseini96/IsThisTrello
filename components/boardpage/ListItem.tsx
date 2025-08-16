@@ -1,6 +1,14 @@
-import { Icon } from "@/components/common";
-import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useRef } from "react";
+import { AppButton, Icon } from "@/components/common";
+import { AppInput } from "@/components/common/AppInput";
+import useCardStore from "@/stores/cardStore";
+import { ListData } from "@/types";
+import { cn } from "@/utils";
+import {
+  EllipsisHorizontalIcon,
+  PlusIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import React, { useEffect, useRef, useState } from "react";
 import ListItemMenu from "@/components/boardpage/ListItemMenu";
 import { CardItem } from "@/components/boardpage";
 import {
@@ -48,9 +56,7 @@ function SortableList({
 
   return (
     <div
-      className={
-        "group flex w-full flex-row items-center rounded-xl bg-gray-700"
-      }
+      className={"group flex w-full flex-row items-center rounded-xl"}
       {...attributes}
       {...listeners}
       ref={setNodeRef}
@@ -62,10 +68,16 @@ function SortableList({
 }
 
 interface Props {
-  name: string;
+  listData?: ListData;
 }
 
-export default function ListItem({ name }: Props) {
+export default function ListItem({ listData }: Props) {
+  const { createCard } = useCardStore();
+  const [isAddingCard, setIsAddingCard] = useState<boolean>(false);
+  const [newCardName, setNewCardName] = useState<string>("");
+  const [newListName, setNewListName] = useState<string>("");
+  const [prevListName] = useState<string>(listData?.name ? listData.name : "");
+  const [isEditingListName, setIsEditingListName] = useState<boolean>(false);
   const [showMenu, setShowMenu] = React.useState(false);
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const [lists, setLists] = React.useState<ListType[]>([
@@ -73,6 +85,10 @@ export default function ListItem({ name }: Props) {
     { id: "2", name: "Second" },
     { id: "3", name: "Third" },
   ]);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
@@ -81,7 +97,13 @@ export default function ListItem({ name }: Props) {
       },
     }),
   );
-  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setNewCardName("");
+    // if (isAddingCard) {
+    //   inputRef.current?.focus();
+    // }
+  }, [isAddingCard]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -111,21 +133,58 @@ export default function ListItem({ name }: Props) {
     }
   }
 
+  const handleAddingNewCard = async () => {
+    if (listData?.id) await createCard(newCardName, listData?.id);
+    setIsAddingCard(false);
+  };
+
+  const handleEditListName = async () => {
+    setIsEditingListName(false);
+  };
+
+  useEffect(() => {
+    console.log(
+      "%c newListName",
+      "color: white; background: #007acc; padding: 2px 6px; border-radius: 4px",
+      newListName,
+    );
+  }, [newListName]);
+
   return (
     <div
       className={
-        "flex max-h-fit w-96 min-w-96 flex-col gap-2 rounded-b-xl bg-gray-900 px-4 pb-4"
+        "flex max-h-fit w-96 min-w-96 flex-col gap-2 rounded-b-xl px-4 pb-4"
       }
     >
-      <div className={"relative flex flex-row items-center"}>
-        <span className={"mr-auto text-xl"}>{name}</span>
+      <div className={"relative flex flex-row items-center justify-between"}>
+        {!isEditingListName ? (
+          <span
+            onClick={() => {
+              setIsEditingListName(true);
+            }}
+            className={"mr-auto border-2 border-transparent px-2 py-2 text-xl"}
+          >
+            {prevListName}
+          </span>
+        ) : (
+          <AppInput
+            value={prevListName}
+            placeholder={prevListName}
+            textSize={"xl"}
+            autoFocus={true}
+            onChange={(name) => {
+              setNewListName(name);
+            }}
+            onBlur={handleEditListName}
+          />
+        )}
         <Icon
           icon={EllipsisHorizontalIcon}
           action={() => {
             setShowMenu(!showMenu);
           }}
           cursor={"pointer"}
-          containerHoverColor={"gray"}
+          containerHoverColor={"slate"}
           containerSize={"sm"}
         />
         {showMenu && <ListItemMenu ref={menuRef} />}
@@ -162,14 +221,53 @@ export default function ListItem({ name }: Props) {
           </DragOverlay>
         </DndContext>
       </div>
-
       <div
-        className={
-          "flex h-10 w-full cursor-pointer flex-row items-center rounded-xl hover:bg-gray-800"
-        }
+        className={cn(
+          "relative overflow-hidden rounded-lg px-2 transition-all duration-300",
+          isAddingCard ? "max-h-46 bg-slate-900/50" : "max-h-16",
+        )}
       >
-        <Icon icon={PlusIcon} />
-        <span className={"text-xl"}>Add a card</span>
+        <div
+          onClick={() => {
+            setShowMenu(false);
+            setIsAddingCard(true);
+          }}
+          className={cn(
+            "mt-3 flex h-10 w-full cursor-pointer flex-row items-center rounded-lg opacity-50 hover:opacity-100",
+            isAddingCard && "opacity-100",
+          )}
+        >
+          <Icon icon={PlusIcon} />
+          <span className={"text-lg"}>Add a card</span>
+        </div>
+        {isAddingCard && (
+          <div className={cn("mt-3 mb-2 flex flex-col rounded-xl")}>
+            <AppInput
+              value={newCardName}
+              onChange={(name) => {
+                setNewCardName(name);
+              }}
+              ref={inputRef}
+              placeholder={"Enter a card name . . ."}
+            />
+            <div className={"mt-2 flex flex-row items-center gap-3"}>
+              <AppButton
+                action={handleAddingNewCard}
+                disabled={newCardName === ""}
+                label={"Add Card"}
+              />
+              <AppButton
+                color={"error"}
+                shape={"circle"}
+                rounded={"full"}
+                action={() => {
+                  setIsAddingCard(false);
+                }}
+                icon={<Icon icon={XMarkIcon} />}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

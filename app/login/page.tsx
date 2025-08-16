@@ -55,7 +55,7 @@ export default function LoginPage() {
       >
         <div
           className={
-            "flex h-full w-full flex-col items-center justify-evenly rounded-xl bg-gray-900 pt-20 pb-20"
+            "flex h-full w-full flex-col items-center justify-evenly rounded-xl bg-slate-900 pt-20 pb-20"
           }
         >
           <div className={"flex flex-row items-center justify-between"}>
@@ -83,7 +83,9 @@ export default function LoginPage() {
           </div>
         </div>
         <div
-          className={"flex w-full flex-col items-center rounded-xl bg-gray-900"}
+          className={
+            "flex w-full flex-col items-center rounded-xl bg-slate-900"
+          }
         >
           <form
             onSubmit={handleSubmit}
@@ -120,7 +122,7 @@ export default function LoginPage() {
             <div className={"flex w-full flex-col items-center gap-10"}>
               <button
                 type="submit"
-                className="w-full cursor-pointer rounded bg-blue-600 p-2 text-white hover:bg-blue-500"
+                className="w-full cursor-pointer rounded bg-sky-600 p-2 text-white hover:bg-sky-500"
                 onClick={handleSubmit}
               >
                 {isSignedUp ? "Login" : "Sign Up"}

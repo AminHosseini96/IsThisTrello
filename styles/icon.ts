@@ -5,8 +5,8 @@ export const iconStyles = tv({
   variants: {
     color: {
       white: "text-white",
-      gray: "text-gray-400",
-      blue: "text-blue-950",
+      slate: "text-slate-400",
+      sky: "text-sky-950",
     },
     size: {
       sm: "h-4 w-4",
@@ -24,8 +24,8 @@ export const iconContainerStyles = tv({
   base: "flex items-center justify-center transition-colors duration-200",
   variants: {
     hoverColor: {
-      gray: "hover:bg-gray-700",
-      blue: "hover:bg-blue-700",
+      slate: "hover:bg-slate-700/50",
+      sky: "hover:bg-sky-700",
       none: "",
     },
     cursor: {

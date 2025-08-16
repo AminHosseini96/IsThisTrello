@@ -17,7 +17,7 @@ import { Divider } from "@mui/material";
 import React from "react";
 
 const itemStyle = tv({
-  base: "flex h-12 w-full flex-row items-center rounded-xl hover:bg-gray-700 active:bg-gray-600 cursor-pointer",
+  base: "flex h-12 w-full flex-row items-center rounded-xl hover:bg-slate-700 active:bg-slate-600 cursor-pointer",
 });
 
 const itemTextStyle = tv({
@@ -42,7 +42,7 @@ export default function SideBar() {
         <span className={itemTextStyle()}>Home</span>
       </div>
 
-      <Divider className={"bg-gray-400"} />
+      <Divider className={"bg-slate-400"} />
       <span className={"mt-2 mb-2"}>Workspaces</span>
 
       <div
@@ -55,7 +55,7 @@ export default function SideBar() {
               "mr-3 flex aspect-square h-4/5 items-center justify-center rounded-lg bg-gradient-to-b from-pink-400 to-pink-600"
             }
           >
-            <span className={"text-xl font-bold text-gray-900"}>T</span>
+            <span className={"text-xl font-bold text-slate-900"}>T</span>
           </div>
           <span className={itemTextStyle()}>IsThisTrello Workspace</span>
         </div>
@@ -86,7 +86,7 @@ export default function SideBar() {
       </div>
 
       <div
-        className={`relative mt-5 flex w-full flex-col gap-2 overflow-hidden bg-gray-700 p-5 ${showOptions ? "opacity-100" : "opacity-0"}`}
+        className={`relative mt-5 flex w-full flex-col gap-2 overflow-hidden bg-slate-700 p-5 ${showOptions ? "opacity-100" : "opacity-0"}`}
       >
         <span className={"font-bold"}>Try IsThisTrello Premium</span>
         <span>
@@ -98,14 +98,14 @@ export default function SideBar() {
         </a>
         <div
           className={
-            "z-20 flex h-10 w-10 items-center justify-center self-end rounded-xl bg-purple-400 hover:bg-purple-500"
+            "z-20 flex h-10 w-10 items-center justify-center self-end rounded-xl bg-violet-400 hover:bg-violet-500"
           }
         >
           <Icon icon={CakeIcon} size={"lg"} />
         </div>
         <div
           className={
-            "absolute right-[-30px] bottom-[-40px] z-0 h-24 w-24 rotate-45 rounded-2xl bg-gray-600"
+            "absolute right-[-30px] bottom-[-40px] z-0 h-24 w-24 rotate-45 rounded-2xl bg-slate-600"
           }
         />
       </div>

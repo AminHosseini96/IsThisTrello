@@ -1,31 +1,33 @@
 "use client";
 
-import { useBoardStore, useUserStore } from "@/stores";
+import { useBoardStore, useUiStore } from "@/stores";
 import React, { forwardRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Props = object;
 
 const colorClasses = {
-  purple: "bg-purple-200",
-  blue: "bg-blue-200",
-  green: "bg-green-200",
+  violet: "bg-violet-200",
+  sky: "bg-sky-200",
+  emerald: "bg-emerald-200",
   lime: "bg-lime-200",
-  yellow: "bg-yellow-200",
+  amber: "bg-amber-200",
   orange: "bg-orange-200",
-  red: "bg-red-200",
+  rose: "bg-rose-200",
   pink: "bg-pink-200",
 } as const;
 type ColorName = keyof typeof colorClasses;
 
 const NewBoardModal = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
-  const [color, setColor] = useState<string>(colorClasses.purple);
+  const [color, setColor] = useState<string>(colorClasses.violet);
   const [title, setTitle] = useState<string>("");
   const { createBoard } = useBoardStore();
+  const { setUi } = useUiStore();
 
   const router = useRouter();
 
   const submitNewBoard = async () => {
+    setUi({ isBoardEmpty: true });
     await createBoard(title, color);
     router.push("/board");
   };
@@ -33,7 +35,7 @@ const NewBoardModal = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
   return (
     <div
       ref={ref}
-      className="absolute top-18 right-3 z-50 flex w-96 flex-col gap-1 rounded-xl border border-gray-400 bg-gray-700 p-4"
+      className="absolute top-18 right-3 z-50 flex w-96 flex-col gap-1 rounded-xl border border-slate-400 bg-slate-700 p-4"
     >
       <span className={"mt-2 mb-2 text-sm font-bold"}>Color</span>
       <div
@@ -48,13 +50,13 @@ const NewBoardModal = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
         ))}
       </div>
       <span className={"mt-2 mb-2 text-sm font-bold"}>
-        Board title <span className={"text-red-400"}>*</span>
+        Board title <span className={"text-rose-400"}>*</span>
       </span>
       <input
         onChange={(e) => setTitle(e.target.value)}
         type="text"
         placeholder={"Title"}
-        className={`${title === "" ? "border-red-400 focus:border-red-400" : "border-blue-300 focus:border-blue-300"} rounded-md border-2 p-2 text-lg focus:ring-0 focus:outline-none`}
+        className={`${title === "" ? "border-rose-400 focus:border-rose-400" : "border-sky-300 focus:border-sky-300"} rounded-md border-2 p-2 text-lg focus:ring-0 focus:outline-none`}
       />
       <button
         onClick={async () => {
@@ -62,7 +64,7 @@ const NewBoardModal = forwardRef<HTMLDivElement, Props>(({}: Props, ref) => {
         }}
         disabled={title === ""}
         type="submit"
-        className="mt-5 w-full cursor-pointer rounded-md bg-blue-500 p-2 text-white hover:bg-blue-600"
+        className="mt-5 w-full cursor-pointer rounded-md bg-sky-500 p-2 text-white hover:bg-sky-600"
       >
         Create
       </button>

@@ -20,7 +20,6 @@ interface BoardStore {
   boards: BoardData[];
   board: BoardData | null;
   loading: boolean;
-  error: string | null;
   unsubscribeBoards?: () => void;
 
   setBoard: (board: BoardData) => void;
@@ -35,14 +34,16 @@ const useBoardStore = create<BoardStore>((set, get) => ({
   boards: [],
   board: null,
   loading: true,
-  error: null,
 
   setBoard: (board) => set({ board }),
 
   fetchBoardsRealtime: () => {
     const user = auth.currentUser;
     if (!user) {
-      set({ error: "Not authenticated" });
+      console.log(
+        "%cError: fetchBoardsRealtime: Not authenticated",
+        "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+      );
       return;
     }
 
@@ -66,8 +67,12 @@ const useBoardStore = create<BoardStore>((set, get) => ({
 
         set({ boards, loading: false });
       },
-      (error) => {
-        set({ error: error.message, loading: false });
+      (err) => {
+        console.log(
+          "%cError: fetchBoardsRealtime",
+          "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+          err,
+        );
       },
     );
 
@@ -78,7 +83,13 @@ const useBoardStore = create<BoardStore>((set, get) => ({
   createBoard: async (name, color) => {
     try {
       const user = auth.currentUser;
-      if (!user) throw new Error("Not authenticated");
+      if (!user) {
+        console.log(
+          "%cError: createBoard: Not authenticated",
+          "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+        );
+        return null;
+      }
 
       const newBoardRef = await addDoc(collection(db, "boards"), {
         uid: user.uid,
@@ -99,7 +110,11 @@ const useBoardStore = create<BoardStore>((set, get) => ({
 
       return newBoardRef.id;
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : String(err) });
+      console.log(
+        "%cError: createBoard",
+        "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+        err,
+      );
       return null;
     }
   },
@@ -111,28 +126,43 @@ const useBoardStore = create<BoardStore>((set, get) => ({
         ...updates,
         lastUpdatedAt: serverTimestamp(),
       });
+      set((state) => ({
+        board: {
+          ...state.board,
+          ...updates,
+          lastUpdatedAt: new Date(),
+        },
+      }));
     } catch (err) {
       console.log(
-        "%cError",
+        "%cError: updateBoard",
         "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
         err,
       );
-
-      set({ error: err instanceof Error ? err.message : String(err) });
     }
   },
 
   deleteBoard: async (id) => {
     try {
       const user = auth.currentUser;
-      if (!user) throw new Error("Not authenticated");
+      if (!user) {
+        console.log(
+          "%cError: deleteBoard: Not authenticated",
+          "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+        );
+        return;
+      }
 
       await deleteDoc(doc(db, "boards", id));
       await updateDoc(doc(db, "users", user.uid), {
         boards: arrayRemove(id),
       });
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : String(err) });
+      console.log(
+        "%cError: deleteBoard",
+        "color: white; background: #cc0000; padding: 2px 6px; border-radius: 4px",
+        err,
+      );
     }
   },
 
